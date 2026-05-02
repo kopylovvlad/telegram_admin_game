@@ -25,9 +25,13 @@
 
 Это статический проект (HTML/CSS/JS)
 
-### Надо просто открыть `index.html`
+### 1 - Открыть локально `index.html`
 
 Можно открыть `index.html` напрямую, но Chrome на macOS иногда блокирует доступ к файлам (`ERR_ACCESS_DENIED`). В этом случае используй вариант с сервером выше.
+
+### 2 - зайти на pages
+
+Зайти по ссылке на [https://kopylovvlad.github.io/telegram_admin_game/](https://kopylovvlad.github.io/telegram_admin_game/)
 
 ## Структура
 
