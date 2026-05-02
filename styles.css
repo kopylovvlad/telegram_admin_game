@@ -71,14 +71,7 @@ h1 {
   font-size: 20px;
 }
 
-.desktop-icons {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.icon-btn, button {
+button {
   background: #2a3d5a;
   color: #f4f6fa;
   border: 1px solid #4a5d7a;
@@ -87,27 +80,23 @@ h1 {
   cursor: pointer;
 }
 
-.icon-btn:hover, button:hover {
+button:hover {
   background: #334b6f;
 }
 
 .windows {
   margin-top: 12px;
   display: grid;
+  gap: 12px;
 }
 
 .window {
-  display: none;
+  display: grid;
   background: #1b263b;
   border: 1px solid #33415c;
   border-radius: 10px;
   padding: 12px;
-  min-height: 350px;
   gap: 10px;
-}
-
-.window.active {
-  display: grid;
 }
 
 .muted {
@@ -188,4 +177,8 @@ h1 {
   padding: 16px;
   display: grid;
   gap: 10px;
+}
+
+#endingText {
+  white-space: pre-line;
 }

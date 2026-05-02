@@ -4,8 +4,7 @@ const gameState = {
   mental: 100,
   actionsLeft: 5,
   postsToday: 0,
-  postTarget: 3,
-  missStreak: 0,
+  postTarget: 5,
   generatedMeme: null,
   over: false,
   history: [],
@@ -79,12 +78,8 @@ const els = {
   postsLabel: document.getElementById("postsLabel"),
   subsValue: document.getElementById("subsValue"),
   mentalValue: document.getElementById("mentalValue"),
-  streakValue: document.getElementById("streakValue"),
+  dailyPostsValue: document.getElementById("dailyPostsValue"),
   chatFeed: document.getElementById("chatFeed"),
-  historyFeed: document.getElementById("historyFeed"),
-  channelsList: document.getElementById("channelsList"),
-  ownMemesList: document.getElementById("ownMemesList"),
-  generatedBox: document.getElementById("generatedBox"),
   overlay: document.getElementById("overlay"),
   endingTitle: document.getElementById("endingTitle"),
   endingText: document.getElementById("endingText")
@@ -108,6 +103,9 @@ function addLog(text, toHistory = true) {
   const p = document.createElement("p");
   p.textContent = line;
   els.chatFeed.prepend(p);
+  while (els.chatFeed.children.length > 6) {
+    els.chatFeed.removeChild(els.chatFeed.lastElementChild);
+  }
 
   if (toHistory) {
     gameState.history.unshift(line);
@@ -116,12 +114,7 @@ function addLog(text, toHistory = true) {
 }
 
 function renderHistory() {
-  els.historyFeed.innerHTML = "";
-  gameState.history.slice(0, 80).forEach((entry) => {
-    const p = document.createElement("p");
-    p.textContent = entry;
-    els.historyFeed.appendChild(p);
-  });
+  // История сохраняется в состоянии для возможного расширения интерфейса.
 }
 
 function makeContent() {
@@ -145,32 +138,7 @@ function makeContent() {
 }
 
 function renderCollections() {
-  els.ownMemesList.innerHTML = "";
-  gameState.ownMemes.forEach((meme) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    card.innerHTML = `
-      <h4>${meme.title}</h4>
-      <p>Качество: ${meme.quality}</p>
-      <p>Трендовость: ${meme.trend}</p>
-      <p>Кринж: ${meme.cringe}</p>
-    `;
-    els.ownMemesList.appendChild(card);
-  });
-
-  els.channelsList.innerHTML = "";
-  gameState.channels.forEach((channel) => {
-    const card = document.createElement("article");
-    card.className = "card";
-    const sample = pickRandom(channel.memes).title;
-    card.innerHTML = `
-      <h4>${channel.name}</h4>
-      <p>Стиль: ${channel.tone}</p>
-      <p>Риск: ${channel.risk}</p>
-      <p>Пример мема: ${sample}</p>
-    `;
-    els.channelsList.appendChild(card);
-  });
+  // Контент каналов/мемов подготавливается для игровой логики.
 }
 
 function spendAction() {
@@ -252,28 +220,6 @@ function postStolen() {
   applyResults({ subs: subsDelta, mental: mentalDelta, message: text });
 }
 
-function generateMeme() {
-  if (!spendAction()) return;
-  const adjectives = ["нервный", "абсурдный", "пиксельный", "батин", "метаироничный", "запрещенный", "легендарный"];
-  const nouns = ["кот", "админ", "алгоритм", "дедлайн", "комментатор", "подписчик", "маркетолог"];
-  const meme = {
-    id: `gen-${Date.now()}`,
-    title: `${pickRandom(adjectives)} ${pickRandom(nouns)} в панике`,
-    quality: pickRandom(["нормальный", "легендарный"]),
-    trend: pickRandom(["средняя", "высокая"]),
-    cringe: pickRandom(["средний", "высокий"])
-  };
-  gameState.generatedMeme = meme;
-  els.generatedBox.textContent = `Сгенерировано: "${meme.title}". Можно постить как свой кринж.`;
-  addLog(`Браузер сгенерил новый мем: "${meme.title}".`, false);
-  updateUI();
-
-  if (!gameState.over && gameState.actionsLeft === 0) {
-    addLog("День закончился.");
-    endDay();
-  }
-}
-
 function triggerRandomEvent() {
   if (Math.random() > 0.7) {
     const event = pickRandom(gameState.randomEvents);
@@ -290,20 +236,7 @@ function triggerContactMessage() {
 
 function endDay() {
   if (gameState.over) return;
-
-  if (gameState.postsToday < gameState.postTarget) {
-    gameState.missStreak += 1;
-    const missing = gameState.postTarget - gameState.postsToday;
-    // Мягкий штраф: первый пропуск не должен мгновенно убивать ран.
-    const penaltySubs = 3 * missing + gameState.missStreak * 2;
-    const penaltyMental = 2 + gameState.missStreak;
-    gameState.subscribers -= penaltySubs;
-    gameState.mental -= penaltyMental;
-    addLog(`Норма не выполнена (${gameState.postsToday}/${gameState.postTarget}). Потеря: -${penaltySubs} подпищиков, -${penaltyMental} менталки.`);
-  } else {
-    gameState.missStreak = 0;
-    addLog(`Норма выполнена (${gameState.postsToday}/${gameState.postTarget}). Канал живет.`);
-  }
+  addLog(`День завершен (${gameState.postsToday}/${gameState.postTarget} постов).`);
 
   triggerRandomEvent();
   triggerContactMessage();
@@ -314,11 +247,6 @@ function endDay() {
   gameState.day += 1;
   gameState.actionsLeft = 5;
   gameState.postsToday = 0;
-
-  if (gameState.day % 4 === 0 && gameState.postTarget < 5) {
-    gameState.postTarget += 1;
-    addLog(`Алгоритмы злеют: дневная норма теперь ${gameState.postTarget} поста(ов).`);
-  }
 
   updateUI();
 }
@@ -360,7 +288,7 @@ function checkGameState() {
 function finishGame(title, text) {
   gameState.over = true;
   els.endingTitle.textContent = title;
-  els.endingText.textContent = `${text}\n\nИтог: \n\n- ${gameState.subscribers} подпищиков \n\n-${gameState.mental}% менталки \n\n- продержался ${gameState.day} дн.`;
+  els.endingText.textContent = `${text}\n\nИтог: \n\n- ${gameState.subscribers} подпищиков \n\n- ${gameState.mental}% менталки \n\n- продержался ${gameState.day} дн.`;
   els.overlay.classList.remove("hidden");
   updateUI();
 }
@@ -369,26 +297,14 @@ function updateUI() {
   els.dayLabel.textContent = `День ${gameState.day}`;
   els.actionsLabel.textContent = `Действий: ${gameState.actionsLeft}`;
   els.postsLabel.textContent = `Постов: ${gameState.postsToday}/${gameState.postTarget}`;
+  els.dailyPostsValue.textContent = `${gameState.postsToday}/${gameState.postTarget}`;
   els.subsValue.textContent = String(gameState.subscribers);
   els.mentalValue.textContent = `${gameState.mental}%`;
-  els.streakValue.textContent = String(gameState.missStreak);
 
   const disabled = gameState.over || gameState.actionsLeft <= 0;
   document.getElementById("postOwnBtn").disabled = disabled;
   document.getElementById("repostBtn").disabled = disabled;
   document.getElementById("stealBtn").disabled = disabled;
-  document.getElementById("generateBtn").disabled = disabled;
-}
-
-function setupDesktopWindows() {
-  const windows = Array.from(document.querySelectorAll(".window"));
-  const buttons = Array.from(document.querySelectorAll(".icon-btn"));
-  buttons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const target = button.dataset.window;
-      windows.forEach((w) => w.classList.toggle("active", w.id === target));
-    });
-  });
 }
 
 function resetGame() {
@@ -397,13 +313,11 @@ function resetGame() {
   gameState.mental = 100;
   gameState.actionsLeft = 5;
   gameState.postsToday = 0;
-  gameState.postTarget = 3;
-  gameState.missStreak = 0;
+  gameState.postTarget = 5;
   gameState.generatedMeme = null;
   gameState.over = false;
   gameState.history = [];
   els.chatFeed.innerHTML = "";
-  els.generatedBox.textContent = "Пока ничего не сгенерировано.";
   els.overlay.classList.add("hidden");
   makeContent();
   renderCollections();
@@ -414,15 +328,12 @@ function resetGame() {
 function init() {
   makeContent();
   renderCollections();
-  setupDesktopWindows();
   addLog("Старт: у тебя 10 подпищиков (мама, батя, бабушка и питомцы).");
   updateUI();
 
   document.getElementById("postOwnBtn").addEventListener("click", postOwnCringe);
   document.getElementById("repostBtn").addEventListener("click", postRepost);
   document.getElementById("stealBtn").addEventListener("click", postStolen);
-  document.getElementById("generateBtn").addEventListener("click", generateMeme);
-  document.getElementById("nextDayBtn").addEventListener("click", endDay);
   document.getElementById("restartBtn").addEventListener("click", resetGame);
 }
 
