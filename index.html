@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Симулятор админа мем-паблика</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="desktop">
+    <header class="topbar">
+      <h1>Симулятор админа мем-паблика</h1>
+      <div class="day-info">
+        <span id="dayLabel">День 1</span>
+        <span id="actionsLabel">Действий: 5</span>
+        <span id="postsLabel">Постов: 0/3</span>
+      </div>
+    </header>
+
+    <section class="stats-strip">
+      <div class="stat-card">
+        <p>Подпищики</p>
+        <strong id="subsValue">10</strong>
+      </div>
+      <div class="stat-card">
+        <p>Менталка</p>
+        <strong id="mentalValue">100%</strong>
+      </div>
+      <div class="stat-card">
+        <p>Серия провалов нормы</p>
+        <strong id="streakValue">0</strong>
+      </div>
+    </section>
+
+    <section class="desktop-icons">
+      <button class="icon-btn" data-window="tele">📨 Телега</button>
+      <button class="icon-btn" data-window="search">🔎 Поиск каналов</button>
+      <button class="icon-btn" data-window="folder">📁 Свои мемы</button>
+      <button class="icon-btn" data-window="browser">🌐 Браузер</button>
+      <button class="icon-btn" data-window="stats">📊 Статистика</button>
+    </section>
+
+    <main class="windows">
+      <section id="tele" class="window active">
+        <h2>Телега</h2>
+        <p class="muted">Публикуй в свой канал минимум 3 мема в день. У тебя 5 действий.</p>
+        <div class="actions-row">
+          <button id="postOwnBtn">Запостить свой кринж</button>
+          <button id="repostBtn">Честный репост</button>
+          <button id="stealBtn">Украсть мем</button>
+        </div>
+        <h3>Чаты и реакции</h3>
+        <div id="chatFeed" class="feed"></div>
+      </section>
+
+      <section id="search" class="window">
+        <h2>Поиск каналов</h2>
+        <p class="muted">Каналы для репостов и кражи. 3-5 штук для MVP.</p>
+        <div id="channelsList" class="cards"></div>
+      </section>
+
+      <section id="folder" class="window">
+        <h2>Папка с собственными мемами</h2>
+        <p class="muted">Твои кринж-запасы (20 мемов).</p>
+        <div id="ownMemesList" class="cards"></div>
+      </section>
+
+      <section id="browser" class="window">
+        <h2>Браузер</h2>
+        <div class="actions-row">
+          <button id="generateBtn">Сгенерировать мем</button>
+          <button id="nextDayBtn">Завершить день</button>
+        </div>
+        <div id="generatedBox" class="generated-box muted">Пока ничего не сгенерировано.</div>
+      </section>
+
+      <section id="stats" class="window">
+        <h2>Статистика канала</h2>
+        <div id="historyFeed" class="feed"></div>
+      </section>
+    </main>
+  </div>
+
+  <div id="overlay" class="overlay hidden">
+    <div class="modal">
+      <h2 id="endingTitle">Итог</h2>
+      <p id="endingText"></p>
+      <button id="restartBtn">Играть заново</button>
+    </div>
+  </div>
+
+  <script src="./game.js"></script>
+</body>
+</html>

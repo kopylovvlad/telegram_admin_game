@@ -1,0 +1,191 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  background: #0d1321;
+  color: #e8ecf1;
+}
+
+.desktop {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  background: #1d2d44;
+  border: 1px solid #33415c;
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+
+h1, h2, h3, p {
+  margin: 0;
+}
+
+h1 {
+  font-size: 18px;
+}
+
+.day-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.day-info span {
+  background: #0f1b2d;
+  border: 1px solid #33415c;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.stats-strip {
+  margin-top: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.stat-card {
+  background: #1b263b;
+  border: 1px solid #33415c;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.stat-card p {
+  color: #b8c2d3;
+  font-size: 12px;
+}
+
+.stat-card strong {
+  font-size: 20px;
+}
+
+.desktop-icons {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.icon-btn, button {
+  background: #2a3d5a;
+  color: #f4f6fa;
+  border: 1px solid #4a5d7a;
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+}
+
+.icon-btn:hover, button:hover {
+  background: #334b6f;
+}
+
+.windows {
+  margin-top: 12px;
+  display: grid;
+}
+
+.window {
+  display: none;
+  background: #1b263b;
+  border: 1px solid #33415c;
+  border-radius: 10px;
+  padding: 12px;
+  min-height: 350px;
+  gap: 10px;
+}
+
+.window.active {
+  display: grid;
+}
+
+.muted {
+  color: #b8c2d3;
+  font-size: 13px;
+}
+
+.actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.feed {
+  margin-top: 8px;
+  border: 1px solid #33415c;
+  border-radius: 8px;
+  background: #0f1b2d;
+  max-height: 260px;
+  overflow: auto;
+  padding: 8px;
+}
+
+.feed p {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.cards {
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+
+.card {
+  background: #0f1b2d;
+  border: 1px solid #33415c;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.card h4 {
+  margin: 0 0 4px;
+  font-size: 14px;
+}
+
+.card p {
+  font-size: 12px;
+  color: #c1cbda;
+}
+
+.generated-box {
+  margin-top: 10px;
+  border: 1px dashed #4a5d7a;
+  border-radius: 8px;
+  padding: 10px;
+  min-height: 90px;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 8, 15, 0.75);
+  display: grid;
+  place-items: center;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.modal {
+  width: min(540px, 90vw);
+  background: #1b263b;
+  border: 1px solid #4a5d7a;
+  border-radius: 10px;
+  padding: 16px;
+  display: grid;
+  gap: 10px;
+}
